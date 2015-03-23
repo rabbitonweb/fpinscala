@@ -151,7 +151,27 @@ object PolymorphicFunctions {
 
   // Exercise 2: Implement a polymorphic function to check whether
   // an `Array[A]` is sorted
-  def isSorted[A](as: Array[A], gt: (A,A) => Boolean): Boolean = ???
+  def isSorted[A](as: Array[A], gt: (A, A) => Boolean): Boolean = {
+
+    @tailrec
+    def inner(index: Int, sorted: Boolean): Boolean = {
+      if (index == as.length - 1) sorted else inner(index + 1, sorted && gt(as(index), as(index + 1)))
+    }
+
+    if (as.length < 2) true else inner(0, true)
+  }
+
+  def main(args: Array[String]) {
+    def intCompare = (a: Int, b: Int) => b > a
+
+    println(s"Array(1, 2, 3, 2, 5, 1) isSorted = ${isSorted(Array(1, 2, 3, 2, 5, 1), intCompare)}")
+    println(s"Array(1, 2, 3) isSorted = ${isSorted(Array(1, 2, 3), intCompare)}")
+    println(s"Array(1, 2) isSorted = ${isSorted(Array(1, 2), intCompare)}")
+    println(s"Array(1) isSorted = ${isSorted(Array(1), intCompare)}")
+    println(s"Array(3, 1) isSorted = ${isSorted(Array(3, 1), intCompare)}")
+    println(s"Array(1, 2, 3, 5, 10) isSorted = ${isSorted(Array(1, 2, 3, 5, 10), intCompare)}")
+    println(s"Array(1, 2, 3, 5, 10, 5) isSorted = ${isSorted(Array(1, 2, 3, 5, 10, 5), intCompare)}")
+  }
 
   // Polymorphic functions are often so constrained by their type
   // that they only have one implementation! Here's an example:
