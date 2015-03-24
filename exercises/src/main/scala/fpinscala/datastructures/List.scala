@@ -62,7 +62,11 @@ object List { // `List` companion object. Contains functions for creating and wo
     case _ => drop(tail(l), n - 1)
   }
 
-  def dropWhile[A](l: List[A], f: A => Boolean): List[A] = sys.error("todo")
+  def dropWhile[A](l: List[A], f: A => Boolean): List[A] = l match {
+    case Nil => throw new RuntimeException("could not tail empty list")
+    case Cons(h, t) if f(h) => dropWhile(tail(l), f)
+    case _ => l
+  }
 
   def init[A](l: List[A]): List[A] = sys.error("todo")
 
